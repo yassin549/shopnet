@@ -44,10 +44,10 @@ services:
     name: create-admin-user
     plan: free
     runtime: image
-    schedule: "0 5 31 2 0"            # A schedule that will never run automatically
-    command: npm run user:create -- --email "khoualdiyassin26@gmail.com" --password "test123" --name "yassin"
+    schedule: "0 5 31 2 0"           # never runs automatically
     image:
       url: evershop/evershop:latest
+    dockerCommand: npm run user:create -- --email "khoualdiyassin26@gmail.com" --password "test123" --name "yassin"
     envVars:
       - key: DB_HOST
         fromDatabase:
@@ -68,6 +68,6 @@ services:
       - key: DB_NAME
         fromDatabase:
           name: evershop-database
-          property: database  # corrected here as well
+          property: database
       - key: NODE_ENV
         value: production
