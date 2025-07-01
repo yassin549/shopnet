@@ -1,47 +1,40 @@
-services:
-  # A PostgreSQL database for our EverShop application
-  - type: psql
-    name: evershop-database
-    # Use the same major version as in docker-compose.yml
-    postgres:
-      version: 16
-    # The free plan has disk size limitations, but it's perfect for starting out.
-    disk:
-      name: postgres-data
-      sizeGB: 1
+# Defines the services and databases for the EverShop application on Render.
+# See https://render.com/docs/blueprint-spec for a full reference.
 
-  # The EverShop application itself
+databases:
+  # A free-tier PostgreSQL database for our EverShop application.
+  - name: evershop-database
+    plan: free # Use Render's free plan for PostgreSQL
+
+services:
+  # The EverShop application itself, running as a web service.
   - type: web
     name: evershop-app
-    # Tell Render to use the pre-built Docker image from Docker Hub
+    plan: free # Use Render's free plan for web services
+    # Tell Render to use the pre-built Docker image from Docker Hub.
     image:
       url: evershop/evershop:latest
     # Set the environment variables to connect to our new database.
-    # Render automatically provides the connection details from the service above.
+    # Render automatically provides the connection details using 'fromDatabase'.
     envVars:
       - key: DB_HOST
-        fromService:
-          type: psql
+        fromDatabase:
           name: evershop-database
           property: host
       - key: DB_PORT
-        fromService:
-          type: psql
+        fromDatabase:
           name: evershop-database
           property: port
       - key: DB_USER
-        fromService:
-          type: psql
+        fromDatabase:
           name: evershop-database
           property: user
       - key: DB_PASSWORD
-        fromService:
-          type: psql
+        fromDatabase:
           name: evershop-database
           property: password
       - key: DB_NAME
-        fromService:
-          type: psql
+        fromDatabase:
           name: evershop-database
           property: database
       - key: NODE_ENV
