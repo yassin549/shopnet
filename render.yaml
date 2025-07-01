@@ -1,6 +1,6 @@
 services:
   # A PostgreSQL database for our EverShop application
-  - type: pserv
+  - type: psql
     name: evershop-database
     # Use the same major version as in docker-compose.yml
     postgres:
@@ -21,27 +21,27 @@ services:
     envVars:
       - key: DB_HOST
         fromService:
-          type: pserv
+          type: psql
           name: evershop-database
           property: host
       - key: DB_PORT
         fromService:
-          type: pserv
+          type: psql
           name: evershop-database
           property: port
       - key: DB_USER
         fromService:
-          type: pserv
+          type: psql
           name: evershop-database
           property: user
       - key: DB_PASSWORD
         fromService:
-          type: pserv
+          type: psql
           name: evershop-database
           property: password
       - key: DB_NAME
         fromService:
-          type: pserv
+          type: psql
           name: evershop-database
           property: database
       - key: NODE_ENV
