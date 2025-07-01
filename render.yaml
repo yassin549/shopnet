@@ -37,3 +37,37 @@ services:
           property: database      # use the valid 'database' property
       - key: NODE_ENV
         value: production
+
+  # A one-time cron job to create the first admin user.
+  # This will be triggered manually from the Render dashboard.
+  - type: cron
+    name: create-admin-user
+    plan: free
+    runtime: image
+    schedule: "0 5 31 2 0" # A schedule that will never run automatically
+    command: npm run user:create -- --email "khoualdiyassin26@gmail.com" --password "test123" --name "yassin"
+    image:
+      url: evershop/evershop:latest
+    envVars:
+      - key: DB_HOST
+        fromDatabase:
+          name: evershop-database
+          property: host
+      - key: DB_PORT
+        fromDatabase:
+          name: evershop-database
+          property: port
+      - key: DB_USER
+        fromDatabase:
+          name: evershop-database
+          property: user
+      - key: DB_PASSWORD
+        fromDatabase:
+          name: evershop-database
+          property: password
+      - key: DB_NAME
+        fromDatabase:
+          name: evershop-database
+          property: database
+      - key: NODE_ENV
+        value: production
