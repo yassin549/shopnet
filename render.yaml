@@ -11,6 +11,7 @@ services:
   - type: web
     name: evershop-app
     plan: free # Use Render's free plan for web services
+    runtime: docker # Specify the runtime as Docker
     # Tell Render to use the pre-built Docker image from Docker Hub.
     image:
       url: evershop/evershop:latest
