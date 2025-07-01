@@ -1,0 +1,48 @@
+services:
+  # A PostgreSQL database for our EverShop application
+  - type: pserv
+    name: evershop-database
+    # Use the same major version as in docker-compose.yml
+    postgres:
+      version: 16
+    # The free plan has disk size limitations, but it's perfect for starting out.
+    disk:
+      name: postgres-data
+      sizeGB: 1
+
+  # The EverShop application itself
+  - type: web
+    name: evershop-app
+    # Tell Render to use the pre-built Docker image from Docker Hub
+    image:
+      url: evershop/evershop:latest
+    # Set the environment variables to connect to our new database.
+    # Render automatically provides the connection details from the service above.
+    envVars:
+      - key: DB_HOST
+        fromService:
+          type: pserv
+          name: evershop-database
+          property: host
+      - key: DB_PORT
+        fromService:
+          type: pserv
+          name: evershop-database
+          property: port
+      - key: DB_USER
+        fromService:
+          type: pserv
+          name: evershop-database
+          property: user
+      - key: DB_PASSWORD
+        fromService:
+          type: pserv
+          name: evershop-database
+          property: password
+      - key: DB_NAME
+        fromService:
+          type: pserv
+          name: evershop-database
+          property: database
+      - key: NODE_ENV
+        value: production
