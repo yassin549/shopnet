@@ -1,22 +1,19 @@
 # Defines the services and databases for the EverShop application on Render.
-# See https://render.com/docs/blueprint-spec for a full reference.
+# See https://render.com/docs/blueprint-spec for full reference.
 
 databases:
   # A free-tier PostgreSQL database for our EverShop application.
   - name: evershop-database
-    plan: free # Use Render's free plan for PostgreSQL
+    plan: free
 
 services:
   # The EverShop application itself, running as a web service.
   - type: web
     name: evershop-app
-    plan: free # Use Render's free plan for web services
-    runtime: docker # Specify the runtime as Docker
-    # Tell Render to use the pre-built Docker image from Docker Hub.
+    plan: free
+    runtime: image                    # Pull a prebuilt image
     image:
-      url: evershop/evershop:latest
-    # Set the environment variables to connect to our new database.
-    # Render automatically provides the connection details using 'fromDatabase'.
+      url: evershop/evershop:latest   # Your Docker Hub image
     envVars:
       - key: DB_HOST
         fromDatabase:
@@ -37,6 +34,6 @@ services:
       - key: DB_NAME
         fromDatabase:
           name: evershop-database
-          property: database
+          property: databaseName
       - key: NODE_ENV
         value: production
