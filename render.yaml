@@ -1,50 +1,8 @@
-# A render.yaml file for the EverShop application on Render.
-# Defines the services and databases. See https://render.com/docs/blueprint-spec for full reference.
-
-databases:
-  # A free-tier PostgreSQL database for our EverShop application.
-  - name: evershop-database
-    plan: free
-
-services:
-  # The EverShop application itself, running as a web service.
-  - type: web
-    name: evershop-app
-    plan: free
-    runtime: image                    # Pull a prebuilt image
-    image:
-      url: evershop/evershop:latest   # Your Docker Hub image
-    envVars:
-      - key: DB_HOST
-        fromDatabase:
-          name: evershop-database
-          property: host
-      - key: DB_PORT
-        fromDatabase:
-          name: evershop-database
-          property: port
-      - key: DB_USER
-        fromDatabase:
-          name: evershop-database
-          property: user
-      - key: DB_PASSWORD
-        fromDatabase:
-          name: evershop-database
-          property: password
-      - key: DB_NAME
-        fromDatabase:
-          name: evershop-database
-          property: database    # use the valid 'database' property
-      - key: NODE_ENV
-        value: production
-
-  # A one-time cron job to create the first admin user.
-  # This will be triggered manually from the Render dashboard.
   - type: cron
     name: create-admin-user
-    plan: free
+    plan: starter                   # “free” isn’t valid for cron jobs—use starter or above
     runtime: image
-    schedule: "0 5 31 2 0"           # never runs automatically
+    schedule: "0 5 31 2 0"         # never runs automatically
     image:
       url: evershop/evershop:latest
     dockerCommand: npm run user:create -- --email "khoualdiyassin26@gmail.com" --password "test123" --name "yassin"
