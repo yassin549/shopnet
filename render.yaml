@@ -1,5 +1,5 @@
-# Defines the services and databases for the EverShop application on Render.
-# See https://render.com/docs/blueprint-spec for full reference.
+# A render.yaml file for the EverShop application on Render.
+# Defines the services and databases. See https://render.com/docs/blueprint-spec for full reference.
 
 databases:
   # A free-tier PostgreSQL database for our EverShop application.
@@ -34,7 +34,7 @@ services:
       - key: DB_NAME
         fromDatabase:
           name: evershop-database
-          property: database      # use the valid 'database' property
+          property: database    # corrected to use the valid 'database' property
       - key: NODE_ENV
         value: production
 
@@ -44,7 +44,7 @@ services:
     name: create-admin-user
     plan: free
     runtime: image
-    schedule: "0 5 31 2 0" # A schedule that will never run automatically
+    schedule: "0 5 31 2 0"            # A schedule that will never run automatically
     command: npm run user:create -- --email "khoualdiyassin26@gmail.com" --password "test123" --name "yassin"
     image:
       url: evershop/evershop:latest
