@@ -34,7 +34,7 @@ services:
       - key: DB_NAME
         fromDatabase:
           name: evershop-database
-          property: database    # corrected to use the valid 'database' property
+          property: database    # use the valid 'database' property
       - key: NODE_ENV
         value: production
 
@@ -68,6 +68,6 @@ services:
       - key: DB_NAME
         fromDatabase:
           name: evershop-database
-          property: database
+          property: database  # corrected here as well
       - key: NODE_ENV
         value: production
