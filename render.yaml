@@ -37,5 +37,13 @@ services:
           property: database
       - key: NODE_ENV
         value: production
+      - key: ADMIN_EMAIL
+        value: admin@evershop.com
+      - key: ADMIN_PASSWORD
+        value: your_admin_password_here
+      - key: SESSION_SECRET
+        value: your_session_secret_here
+      - key: CSRF_SECRET
+        value: your_csrf_secret_here
 
 
