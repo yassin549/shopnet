@@ -1,10 +1,11 @@
 # Defines the services and databases for the EverShop application on Render.
 # See https://render.com/docs/blueprint-spec for full reference.
 
+# Use your existing Render PostgreSQL database
+# Replace DATABASE_NAME with your actual database name from Render dashboard
 databases:
-  # A PostgreSQL database for our EverShop application.
-  - name: evershop-database
-    plan: free # Using free plan
+  - name: DATABASE_NAME
+    plan: free
 
 services:
   # The EverShop application itself, running as a web service.
