@@ -4,13 +4,13 @@
 databases:
   # A PostgreSQL database for our EverShop application.
   - name: evershop-database
-    plan: starter # Using starter for reliability, free is also an option
+    plan: free # Using free plan
 
 services:
   # The EverShop application itself, running as a web service.
   - type: web
     name: evershop-app
-    plan: starter # Using starter for reliability, free is also an option
+    plan: free # Using free plan
     runtime: image
     image:
       url: evershop/evershop:latest
