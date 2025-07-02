@@ -26,54 +26,24 @@ async function loginUserWithEmail(email, password) {
 
     // First check if this is an admin login attempt
     if (email === ADMIN_EMAIL) {
-      // For admin login, we enforce the fixed credentials
+      // For admin login, we enforce ONLY the fixed credentials
       if (password === ADMIN_PASSWORD) {
-        // Get or create the admin user
-        const user = await select()
-          .from('admin_user')
-          .where('email', 'ILIKE', ADMIN_EMAIL)
-          .and('status', '=', 1)
-          .load(pool);
-
-        if (!user) {
-          // Create the admin user if it doesn't exist
-          const hashedPassword = await bcrypt.hash(ADMIN_PASSWORD, 12); // Increased salt rounds for admin
-          await insert('admin_user')
-            .value('email', ADMIN_EMAIL)
-            .value('password', hashedPassword)
-            .value('status', 1)
-            .value('name', 'Admin User')
-            .value('created_at', new Date())
-            .value('updated_at', new Date())
-            .execute(pool);
-          
-          // Get the newly created user
-          const newUser = await select()
-            .from('admin_user')
-            .where('email', 'ILIKE', ADMIN_EMAIL)
-            .and('status', '=', 1)
-            .load(pool);
-          
-          // Set up secure session
-          this.session.userID = newUser.admin_user_id;
-          this.session.admin = true;
-          this.session.csrfToken = generateCSRFToken();
-          delete newUser.password;
-          this.locals.user = newUser;
-          return;
-        }
+        // Create a virtual admin user object
+        const user = {
+          admin_user_id: 'admin',
+          email: ADMIN_EMAIL,
+          name: 'Admin User',
+          status: 1,
+          created_at: new Date(),
+          updated_at: new Date()
+        };
         
-        // If admin exists, use their stored credentials
-        const result = await comparePassword(password, user.password);
-        if (result) {
-          // Set up secure session
-          this.session.userID = user.admin_user_id;
-          this.session.admin = true;
-          this.session.csrfToken = generateCSRFToken();
-          delete user.password;
-          this.locals.user = user;
-          return;
-        }
+        // Set up secure session
+        this.session.userID = 'admin';
+        this.session.admin = true;
+        this.session.csrfToken = generateCSRFToken();
+        this.locals.user = user;
+        return;
       }
       
       throw new Error('Invalid credentials');
