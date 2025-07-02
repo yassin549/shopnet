@@ -1,9 +1,9 @@
 FROM node:18-alpine AS builder
 WORKDIR /app
 
-# Install dependencies
+# Install dependencies and build tools
 COPY package*.json .
-RUN npm install --production
+RUN npm install --include=dev
 
 # Copy source code
 COPY packages ./packages
@@ -15,14 +15,17 @@ COPY config ./config
 COPY translations ./translations
 
 # Build the application
-RUN npm run build
+RUN npm run compile
 
 # Production image
 FROM node:18-alpine
 WORKDIR /app
 
+# Install production dependencies
+COPY package*.json .
+RUN npm install --production
+
 # Copy built files from builder stage
-COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/packages ./packages
 COPY --from=builder /app/themes ./themes
 COPY --from=builder /app/extensions ./extensions
@@ -38,4 +41,4 @@ ENV PORT=80
 
 # Expose port and start command
 EXPOSE 80
-CMD ["npm", "run", "start"]
+CMD ["node", "./packages/evershop/dist/bin/start/index.js"]
