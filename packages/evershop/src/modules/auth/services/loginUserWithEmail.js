@@ -7,23 +7,30 @@ import { comparePassword } from '../../../lib/util/passwordHelper.js';
  * @param {string} email
  * @param {string} password
  */
+import { ADMIN_EMAIL, ADMIN_PASSWORD } from '../../../config/adminCredentials.js';
+
 async function loginUserWithEmail(email, password) {
-  // Escape the email to prevent SQL injection
-  const userEmail = email.replace(/%/g, '\\%');
-  const user = await select()
-    .from('admin_user')
-    .where('email', 'ILIKE', userEmail)
-    .and('status', '=', 1)
-    .load(pool);
-  const result = comparePassword(password, user ? user.password : '');
-  if (!user || !result) {
+  // Check if the provided credentials match our fixed admin credentials
+  if (email === ADMIN_EMAIL && password === ADMIN_PASSWORD) {
+    // Get the admin user from the database
+    const user = await select()
+      .from('admin_user')
+      .where('email', 'ILIKE', ADMIN_EMAIL)
+      .and('status', '=', 1)
+      .load(pool);
+
+    if (!user) {
+      throw new Error('Admin user not found');
+    }
+
+    this.session.userID = user.admin_user_id;
+    // Delete the password field
+    delete user.password;
+    // Save the user in the request
+    this.locals.user = user;
+  } else {
     throw new Error('Invalid email or password');
   }
-  this.session.userID = user.admin_user_id;
-  // Delete the password field
-  delete user.password;
-  // Save the user in the request
-  this.locals.user = user;
 }
 
 export default loginUserWithEmail;

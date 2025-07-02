@@ -1,11 +1,19 @@
-  - type: cron
-    name: create-admin-user
-    plan: starter                   # “free” isn’t valid for cron jobs—use starter or above
+# Defines the services and databases for the EverShop application on Render.
+# See https://render.com/docs/blueprint-spec for full reference.
+
+databases:
+  # A PostgreSQL database for our EverShop application.
+  - name: evershop-database
+    plan: starter # Using starter for reliability, free is also an option
+
+services:
+  # The EverShop application itself, running as a web service.
+  - type: web
+    name: evershop-app
+    plan: starter # Using starter for reliability, free is also an option
     runtime: image
-    schedule: "0 5 31 2 0"         # never runs automatically
     image:
       url: evershop/evershop:latest
-    dockerCommand: npm run user:create -- --email "khoualdiyassin26@gmail.com" --password "test123" --name "yassin"
     envVars:
       - key: DB_HOST
         fromDatabase:
@@ -29,3 +37,5 @@
           property: database
       - key: NODE_ENV
         value: production
+
+
