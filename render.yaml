@@ -40,7 +40,7 @@ services:
       - key: ADMIN_EMAIL
         value: admin@evershop.com
       - key: ADMIN_PASSWORD
-        value: your_admin_password_here
+        value: admin123
       - key: SESSION_SECRET
         value: your_session_secret_here
       - key: CSRF_SECRET
